@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prise de Rendez-vous — Dr Mariem Ben Ammar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #C8A876;
+  --gold-light: #E8D5AF;
+  --gold-dark: #8D6E3A;
+  --gold-glow: rgba(200,168,118,0.15);
+  --cream: #F9F5EF;
+  --cream2: #F2EBE0;
+  --border: #E5DDD0;
+  --dark: #0F0D0A;
+  --dark2: #1C1915;
+  --text: #2A2520;
+  --muted: #9A9188;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --radius: 14px;
+  --shadow: 0 2px 20px rgba(0,0,0,0.06);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(200,168,118,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 5% 80%, rgba(200,168,118,0.07) 0%, transparent 60%),
+    linear-gradient(160deg, #F9F5EF 0%, #F4EDE2 50%, #EEE3D0 100%);
+  pointer-events: none;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: relative; z-index: 10;
+  padding: 32px 40px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 900px; margin: 0 auto;
+}
+.brand {
+  display: flex; align-items: center; gap: 14px;
+}
+.brand-mark {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 22px; color: #fff;
+  box-shadow: 0 4px 16px rgba(200,168,118,0.35);
+  flex-shrink: 0;
+}
+.brand-info { }
+.brand-name {
+  font-family: var(--serif); font-size: 18px; font-weight: 600;
+  color: var(--dark); line-height: 1.2;
+}
+.brand-role {
+  font-size: 12px; color: var(--muted); font-weight: 400;
+  letter-spacing: 0.3px;
+}
+.header-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 16px;
+  background: rgba(200,168,118,0.12);
+  border: 1px solid rgba(200,168,118,0.3);
+  border-radius: 24px;
+  font-size: 12px; color: var(--gold-dark); font-weight: 500;
+}
+.badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #4CAF50; flex-shrink:0; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 5;
+  max-width: 900px; margin: 0 auto;
+  padding: 48px 40px 32px;
+  text-align: center;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--gold-dark); margin-bottom: 20px;
+}
+.hero-tag::before, .hero-tag::after {
+  content:''; display:block; width:32px; height:1.5px; background:var(--gold);
+}
+.hero-h1 {
+  font-family: var(--serif); font-size: clamp(36px, 6vw, 56px); font-weight: 300;
+  line-height: 1.05; color: var(--dark); letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+.hero-h1 em { font-style: italic; color: var(--gold-dark); }
+.hero-sub {
+  font-size: 15px; color: var(--muted); line-height: 1.7;
+  max-width: 460px; margin: 0 auto 32px;
+}
+.hero-cities {
+  display: flex; align-items: center; justify-content: center; gap: 32px;
+  margin-bottom: 8px;
+}
+.city-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 22px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 32px;
+  font-size: 13px; font-weight: 500; color: var(--text);
+  box-shadow: var(--shadow);
+}
+.city-icon { font-size: 15px; }
+.hero-divider { width: 1px; height: 28px; background: var(--border); }
+.hero-sep { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 32px auto 0; }
+
+/* ── FORM WRAPPER ── */
+.form-wrap {
+  position: relative; z-index: 5;
+  max-width: 760px; margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ── STEP CARD ── */
+.step-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 40px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.step-card.visible { opacity: 1; transform: translateY(0); }
+
+.step-header {
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.step-num {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 15px; color: #fff; font-weight: 600;
+}
+.step-title { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--dark); line-height: 1.2; }
+.step-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+/* ── FIELDS ── */
+.field-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 16px;
+}
+.field-row.full { grid-template-columns: 1fr; }
+@media(max-width: 600px){ .field-row { grid-template-columns: 1fr; } }
+
+.field {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.field label {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted);
+}
+.field label span { color: var(--gold-dark); margin-left: 2px; }
+
+.field input, .field select, .field textarea {
+  font-family: var(--sans);
+  font-size: 14px; color: var(--text);
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  appearance: none;
+  width: 100%;
+}
+.field input::placeholder, .field textarea::placeholder { color: #BFB8AE; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--gold);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(200,168,118,0.12);
+}
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23C8A876' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+.field textarea { resize: none; min-height: 90px; line-height: 1.5; }
+
+/* Phone row */
+.phone-wrap { position: relative; }
+.phone-prefix {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 13px; color: var(--muted); font-weight: 500;
+  pointer-events: none;
+}
+.phone-wrap input { padding-left: 52px; }
+
+/* ── CITY CHOICE ── */
+.city-choice {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-bottom: 16px;
+}
+.city-btn {
+  position: relative;
+  padding: 18px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--cream);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  display: flex; flex-direction: column; gap: 4px;
+  overflow: hidden;
+}
+.city-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(200,168,118,0.08) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.2s;
+}
+.city-btn:hover { border-color: rgba(200,168,118,0.5); }
+.city-btn:hover::before { opacity: 1; }
+.city-btn.selected { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200,168,118,0.12); }
+.city-btn.selected::before { opacity: 1; }
+.city-btn-icon { font-size: 22px; margin-bottom: 6px; }
+.city-btn-name { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--dark); }
+.city-btn-sub { font-size: 11px; color: var(--muted); }
+.city-btn-check {
+  position: absolute; top: 12px; right: 12px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5); transition: all 0.2s;
+}
+.city-btn.selected .city-btn-check { opacity: 1; transform: scale(1); }
+
+/* ── INTERVENTION CHOICES ── */
+.intervention-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-bottom: 16px;
+}
+@media(max-width:520px){ .intervention-grid { grid-template-columns: 1fr; } }
+
+.int-btn {
+  position: relative;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--cream);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 12px;
+  text-align: left;
+}
+.int-btn:hover { border-color: rgba(200,168,118,0.5); background: #faf6f0; }
+.int-btn.selected { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 3px rgba(200,168,118,0.1); }
+.int-icon {
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  background: var(--cream2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; transition: all 0.2s;
+}
+.int-btn.selected .int-icon { background: rgba(200,168,118,0.15); border-color: rgba(200,168,118,0.3); }
+.int-text { flex: 1; }
+.int-name { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.int-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.int-check {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.int-btn.selected .int-check {
+  background: var(--gold); border-color: var(--gold);
+}
+.int-btn.selected .int-check::after {
+  content: ''; display: block;
+  width: 6px; height: 6px; border-radius: 50%; background: #fff;
+}
+
+/* ── DATE / TIME GRID ── */
+.date-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px;
+  margin-bottom: 16px;
+}
+.date-slot {
+  padding: 10px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--cream);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.18s;
+}
+.date-slot:hover { border-color: rgba(200,168,118,0.5); background: #faf6f0; }
+.date-slot.selected { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 3px rgba(200,168,118,0.1); }
+.date-slot.unavailable { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+.date-day { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 500; }
+.date-num { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--dark); line-height: 1; margin: 2px 0; }
+.date-month { font-size: 10px; color: var(--muted); }
+.date-slot.selected .date-num { color: var(--gold-dark); }
+
+.time-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px;
+  margin-top: 8px;
+}
+.time-slot {
+  padding: 10px 8px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--cream);
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px; font-weight: 500; color: var(--text);
+  transition: all 0.18s;
+}
+.time-slot:hover { border-color: rgba(200,168,118,0.5); background: #faf6f0; }
+.time-slot.selected { border-color: var(--gold); background: #fff; color: var(--gold-dark); font-weight: 600; box-shadow: 0 0 0 3px rgba(200,168,118,0.1); }
+.time-slot.unavailable { opacity: 0.3; cursor: not-allowed; pointer-events: none; text-decoration: line-through; }
+
+.slot-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--muted); margin: 16px 0 8px;
+}
+
+/* ── SUBMIT ── */
+.submit-area {
+  margin-top: 28px; padding-top: 28px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.submit-btn {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; max-width: 380px;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: #fff;
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  border: none; border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(141,110,58,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.3px;
+}
+.submit-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  opacity: 0; transition: opacity 0.2s;
+}
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(141,110,58,0.45); }
+.submit-btn:hover::before { opacity: 1; }
+.submit-btn:active { transform: translateY(0); }
+.submit-note { font-size: 12px; color: var(--muted); text-align: center; display: flex; align-items: center; gap: 6px; }
+.lock-icon { font-size: 13px; }
+
+/* ── SUCCESS ── */
+.success-screen {
+  display: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.success-screen.show { display: block; animation: fadeUp 0.6s ease forwards; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.success-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin: 0 auto 24px;
+  box-shadow: 0 8px 28px rgba(200,168,118,0.4);
+}
+.success-h { font-family: var(--serif); font-size: 32px; font-weight: 400; color: var(--dark); margin-bottom: 12px; }
+.success-h em { font-style: italic; color: var(--gold-dark); }
+.success-p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 32px; }
+.success-info {
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 10px;
+  background: var(--cream); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px 28px; margin-bottom: 28px;
+}
+.info-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); }
+.info-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; }
+.new-rdv-btn {
+  padding: 12px 32px;
+  border: 1.5px solid var(--gold);
+  border-radius: 32px;
+  background: transparent;
+  font-family: var(--sans); font-size: 13px; color: var(--gold-dark); font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+}
+.new-rdv-btn:hover { background: var(--gold); color: #fff; }
+
+/* ── FOOTER ── */
+.site-footer {
+  position: relative; z-index: 5;
+  max-width: 900px; margin: 0 auto;
+  padding: 0 24px 40px;
+  text-align: center;
+}
+.footer-sep { width: 60px; height: 1px; background: var(--border); margin: 0 auto 20px; }
+.footer-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.footer-text strong { color: var(--text); font-weight: 500; }
+
+/* ── ERROR ── */
+.field.error input, .field.error select, .field.error textarea { border-color: #E07070; box-shadow: 0 0 0 3px rgba(224,112,112,0.1); }
+.error-msg { font-size: 11px; color: #C0504D; margin-top: 4px; display: none; }
+.field.error .error-msg { display: block; }
+
+/* ── LOADER ── */
+.btn-loader { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.submit-btn.loading .btn-text { display: none; }
+.submit-btn.loading .btn-loader { display: block; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gold-light); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">M</div>
+    <div class="brand-info">
+      <div class="brand-name">Dr Mariem Ben Ammar</div>
+      <div class="brand-role">Chirurgien-Dentiste · Tunis & Sousse</div>
+    </div>
+  </div>
+  <div class="header-badge">
+    <span class="badge-dot"></span>
+    Disponible dès le 26 juin
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Prise de Rendez-vous</div>
+  <h1 class="hero-h1">Votre sourire mérite<br>le <em>meilleur</em></h1>
+  <p class="hero-sub">Remplissez le formulaire ci-dessous pour réserver votre consultation. Nous confirmerons votre rendez-vous dans les plus brefs délais.</p>
+  <div class="hero-cities">
+    <div class="city-pill"><span class="city-icon">🏛</span> Tunis</div>
+    <div class="hero-divider"></div>
+    <div class="city-pill"><span class="city-icon">🌊</span> Sousse</div>
+  </div>
+  <div class="hero-sep"></div>
+</section>
+
+<!-- FORM -->
+<main class="form-wrap">
+  <form id="rdvForm" novalidate>
+
+    <!-- STEP 1 – Identité -->
+    <div class="step-card" id="card1">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Vos informations personnelles</div>
+          <div class="step-subtitle">Pour vous identifier et vous contacter</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="f-prenom">
+          <label>Prénom <span>*</span></label>
+          <input type="text" id="prenom" placeholder="Votre prénom" autocomplete="given-name">
+          <span class="error-msg">Ce champ est requis</span>
+        </div>
+        <div class="field" id="f-nom">
+          <label>Nom <span>*</span></label>
+          <input type="text" id="nom" placeholder="Votre nom" autocomplete="family-name">
+          <span class="error-msg">Ce champ est requis</span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="f-tel">
+          <label>Téléphone <span>*</span></label>
+          <div class="phone-wrap">
+            <span class="phone-prefix">+216</span>
+            <input type="tel" id="tel" placeholder="XX XXX XXX" maxlength="12" autocomplete="tel">
+          </div>
+          <span class="error-msg">Numéro invalide (8 chiffres)</span>
+        </div>
+        <div class="field" id="f-age">
+          <label>Âge</label>
+          <input type="number" id="age" placeholder="Votre âge" min="1" max="120">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 – Ville -->
+    <div class="step-card" id="card2">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Choisissez votre ville</div>
+          <div class="step-subtitle">Cabinet disponible à partir du 26 juin</div>
+        </div>
+      </div>
+
+      <div class="city-choice" id="cityChoice">
+        <button type="button" class="city-btn" data-city="Tunis" onclick="selectCity(this)">
+          <div class="city-btn-icon">🏛</div>
+          <div class="city-btn-name">Tunis</div>
+          <div class="city-btn-sub">À partir du 26 juin</div>
+          <div class="city-btn-check">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+        <button type="button" class="city-btn" data-city="Sousse" onclick="selectCity(this)">
+          <div class="city-btn-icon">🌊</div>
+          <div class="city-btn-name">Sousse</div>
+          <div class="city-btn-sub">À partir du 26 juin</div>
+          <div class="city-btn-check">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+      </div>
+      <div class="field" id="f-city" style="display:none;">
+        <span class="error-msg" style="display:block;">Veuillez choisir une ville</span>
+      </div>
+    </div>
+
+    <!-- STEP 3 – Intervention -->
+    <div class="step-card" id="card3">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Type d'intervention</div>
+          <div class="step-subtitle">Sélectionnez le motif de votre consultation</div>
+        </div>
+      </div>
+
+      <div class="intervention-grid" id="intGrid">
+        <button type="button" class="int-btn" data-int="Consultation générale" onclick="selectInt(this)">
+          <div class="int-icon">🔍</div>
+          <div class="int-text">
+            <div class="int-name">Consultation générale</div>
+            <div class="int-sub">Bilan & examen complet</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Détartrage" onclick="selectInt(this)">
+          <div class="int-icon">✨</div>
+          <div class="int-text">
+            <div class="int-name">Détartrage</div>
+            <div class="int-sub">Nettoyage professionnel</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Carie / Obturation" onclick="selectInt(this)">
+          <div class="int-icon">🦷</div>
+          <div class="int-text">
+            <div class="int-name">Carie / Obturation</div>
+            <div class="int-sub">Traitement de carie</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Extraction dentaire" onclick="selectInt(this)">
+          <div class="int-icon">🩺</div>
+          <div class="int-text">
+            <div class="int-name">Extraction dentaire</div>
+            <div class="int-sub">Avulsion / dent de sagesse</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Prothèse / Couronne" onclick="selectInt(this)">
+          <div class="int-icon">👑</div>
+          <div class="int-text">
+            <div class="int-name">Prothèse / Couronne</div>
+            <div class="int-sub">Couronnes & bridges</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Blanchiment dentaire" onclick="selectInt(this)">
+          <div class="int-icon">🌟</div>
+          <div class="int-text">
+            <div class="int-name">Blanchiment</div>
+            <div class="int-sub">Éclaircissement dentaire</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Orthodontie" onclick="selectInt(this)">
+          <div class="int-icon">🔧</div>
+          <div class="int-text">
+            <div class="int-name">Orthodontie</div>
+            <div class="int-sub">Alignement & appareils</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Urgence dentaire" onclick="selectInt(this)">
+          <div class="int-icon">🚨</div>
+          <div class="int-text">
+            <div class="int-name">Urgence dentaire</div>
+            <div class="int-sub">Douleur / fracture aiguë</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Implant dentaire" onclick="selectInt(this)">
+          <div class="int-icon">⚙️</div>
+          <div class="int-text">
+            <div class="int-name">Implant dentaire</div>
+            <div class="int-sub">Pose d'implant</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+        <button type="button" class="int-btn" data-int="Pédiatrie dentaire" onclick="selectInt(this)">
+          <div class="int-icon">👶</div>
+          <div class="int-text">
+            <div class="int-name">Pédiatrie dentaire</div>
+            <div class="int-sub">Soins pour enfants</div>
+          </div>
+          <div class="int-check"></div>
+        </button>
+      </div>
+
+      <div class="field" id="f-int" style="display:none;">
+        <span class="error-msg" style="display:block;">Veuillez choisir une intervention</span>
+      </div>
+
+      <div class="field field-row full" style="margin-top:4px;">
+        <label>Précisions supplémentaires <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(facultatif)</span></label>
+        <textarea id="notes" placeholder="Décrivez votre problème, symptômes, douleurs ou toute information utile pour le médecin…"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 4 – Date & Heure -->
+    <div class="step-card" id="card4">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Date & heure souhaitées</div>
+          <div class="step-subtitle">Disponibilités à partir du 26 juin 2025</div>
+        </div>
+      </div>
+
+      <div class="slot-label">Choisissez une date</div>
+      <div class="date-grid" id="dateGrid"></div>
+
+      <div class="slot-label" id="timeLabel" style="display:none;">Choisissez un créneau</div>
+      <div class="time-grid" id="timeGrid" style="display:none;"></div>
+
+      <div class="field" id="f-date" style="display:none;">
+        <span class="error-msg" style="display:block;">Veuillez choisir une date et un horaire</span>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="step-card" id="card5" style="padding:32px 40px;">
+      <div style="margin-bottom:16px;">
+        <div style="font-family:var(--serif);font-size:18px;color:var(--dark);margin-bottom:6px;">Confirmer votre rendez-vous</div>
+        <div style="font-size:13px;color:var(--muted);">Vérifiez vos informations avant d'envoyer</div>
+      </div>
+
+      <!-- Résumé -->
+      <div id="summary" style="background:var(--cream);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:8px;display:none;">
+        <div id="sumContent" style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--text);"></div>
+      </div>
+
+      <div class="submit-area">
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text">✦ &nbsp; Envoyer via WhatsApp</span>
+          <div class="btn-loader"></div>
+        </button>
+        <div class="submit-note">
+          <span class="lock-icon">🔒</span>
+          Vos données sont confidentielles et protégées
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2 class="success-h">Demande <em>envoyée</em> !</h2>
+    <p class="success-p">Votre demande de rendez-vous a bien été reçue. Le Dr Ben Ammar vous contactera rapidement pour confirmer votre consultation.</p>
+    <div class="success-info" id="successInfo"></div>
+    <button class="new-rdv-btn" onclick="resetForm()">Nouveau rendez-vous</button>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-sep"></div>
+  <div class="footer-text">
+    <strong>Dr Mariem Ben Ammar</strong> — Chirurgien-Dentiste<br>
+    Consultations à <strong>Tunis</strong> & <strong>Sousse</strong> · À partir du <strong>26 juin 2025</strong><br>
+    Rendez-vous par message privé ou par téléphone
+  </div>
+</footer>
+
+<script>
+// ── State
+let selectedCity = '';
+let selectedInt = '';
+let selectedDate = '';
+let selectedTime = '';
+
+// ── Animate cards on load
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.step-card');
+  cards.forEach((card, i) => {
+    setTimeout(() => card.classList.add('visible'), 150 + i * 120);
+  });
+  buildDates();
+  updateSummary();
+});
+
+// ── City
+function selectCity(btn) {
+  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedCity = btn.dataset.city;
+  document.getElementById('f-city').style.display = 'none';
+  updateSummary();
+}
+
+// ── Intervention
+function selectInt(btn) {
+  document.querySelectorAll('.int-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedInt = btn.dataset.int;
+  document.getElementById('f-int').style.display = 'none';
+  updateSummary();
+}
+
+// ── Build dates (26 juin → 15 août 2025, jours disponibles)
+function buildDates() {
+  const grid = document.getElementById('dateGrid');
+  grid.innerHTML = '';
+  const days = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const months = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû'];
+  
+  // Unavailable dates (dim + random)
+  const unavail = [0, 6]; // Sunday, Saturday
+  const extraUnavail = [27, 28, 4, 5, 11]; // some random unavailable
+
+  let d = new Date(2025, 5, 26); // 26 juin
+  let count = 0;
+  while (count < 30) {
+    const dayOfWeek = d.getDay();
+    const dayOfMonth = d.getDate();
+    const isUnavail = unavail.includes(dayOfWeek) || (extraUnavail.includes(dayOfMonth) && d.getMonth() === 5);
+
+    const el = document.createElement('div');
+    el.className = 'date-slot' + (isUnavail ? ' unavailable' : '');
+    el.dataset.date = d.toLocaleDateString('fr-FR');
+    el.dataset.full = `${days[dayOfWeek]} ${d.getDate()} ${months[d.getMonth()]}`;
+    el.innerHTML = `
+      <div class="date-day">${days[dayOfWeek]}</div>
+      <div class="date-num">${d.getDate()}</div>
+      <div class="date-month">${months[d.getMonth()]}</div>
+    `;
+    if (!isUnavail) {
+      el.addEventListener('click', () => selectDate(el));
+    }
+    grid.appendChild(el);
+    d.setDate(d.getDate() + 1);
+    count++;
+  }
+}
+
+function selectDate(el) {
+  document.querySelectorAll('.date-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDate = el.dataset.full;
+  selectedTime = '';
+  buildTimes();
+  document.getElementById('timeLabel').style.display = 'block';
+  document.getElementById('timeGrid').style.display = 'grid';
+  document.getElementById('f-date').style.display = 'none';
+  updateSummary();
+}
+
+function buildTimes() {
+  const grid = document.getElementById('timeGrid');
+  grid.innerHTML = '';
+  const slots = ['08:30','09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00'];
+  const unavail = ['09:30','11:00','14:30','16:30']; // Some taken
+
+  slots.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'time-slot' + (unavail.includes(t) ? ' unavailable' : '');
+    el.textContent = t;
+    if (!unavail.includes(t)) {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedTime = t;
+        updateSummary();
+      });
+    }
+    grid.appendChild(el);
+  });
+}
+
+// ── Summary
+function updateSummary() {
+  const sum = document.getElementById('summary');
+  const cont = document.getElementById('sumContent');
+  const prenom = document.getElementById('prenom').value;
+  const nom = document.getElementById('nom').value;
+  
+  const items = [];
+  if (prenom || nom) items.push(`<span style="color:var(--muted);min-width:80px;display:inline-block;">Patient</span> <strong>${prenom} ${nom}</strong>`);
+  if (selectedCity) items.push(`<span style="color:var(--muted);min-width:80px;display:inline-block;">Ville</span> <strong>${selectedCity}</strong>`);
+  if (selectedInt) items.push(`<span style="color:var(--muted);min-width:80px;display:inline-block;">Soin</span> <strong>${selectedInt}</strong>`);
+  if (selectedDate) items.push(`<span style="color:var(--muted);min-width:80px;display:inline-block;">Date</span> <strong>${selectedDate}</strong>`);
+  if (selectedTime) items.push(`<span style="color:var(--muted);min-width:80px;display:inline-block;">Heure</span> <strong>${selectedTime}</strong>`);
+
+  if (items.length > 0) {
+    cont.innerHTML = items.map(i => `<div>${i}</div>`).join('');
+    sum.style.display = 'block';
+  } else {
+    sum.style.display = 'none';
+  }
+}
+
+// Live update summary on typing
+['prenom','nom'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateSummary);
+});
+
+// ── Validation
+function validate() {
+  let ok = true;
+
+  const fields = [
+    { id: 'prenom', fid: 'f-prenom', check: v => v.trim().length >= 2 },
+    { id: 'nom', fid: 'f-nom', check: v => v.trim().length >= 2 },
+    { id: 'tel', fid: 'f-tel', check: v => /^\d{8,12}$/.test(v.replace(/\s/g,'')) }
+  ];
+
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    const wrap = document.getElementById(f.fid);
+    if (!f.check(el.value)) { wrap.classList.add('error'); ok = false; }
+    else { wrap.classList.remove('error'); }
+  });
+
+  if (!selectedCity) {
+    document.getElementById('f-city').style.display = 'block';
+    ok = false;
+  }
+  if (!selectedInt) {
+    document.getElementById('f-int').style.display = 'block';
+    ok = false;
+  }
+  if (!selectedDate || !selectedTime) {
+    document.getElementById('f-date').style.display = 'block';
+    ok = false;
+  }
+
+  return ok;
+}
+
+// ── Submit
+document.getElementById('rdvForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!validate()) {
+    // Scroll to first error
+    const firstErr = document.querySelector('.field.error, #f-city[style*="block"], #f-int[style*="block"], #f-date[style*="block"]');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Build WhatsApp message FIRST (must be synchronous before any await)
+  const prenom = document.getElementById('prenom').value;
+  const nom = document.getElementById('nom').value;
+  const tel = document.getElementById('tel').value;
+  const age = document.getElementById('age').value;
+  const notes = document.getElementById('notes').value;
+
+  const msg = [
+    '🦷 *Demande de Rendez-vous*',
+    '━━━━━━━━━━━━━━━━━',
+    `👤 *Patient :* ${prenom} ${nom}`,
+    tel ? `📞 *Téléphone :* +216 ${tel}` : '',
+    age ? `🎂 *Âge :* ${age} ans` : '',
+    `📍 *Ville :* ${selectedCity}`,
+    `🩺 *Intervention :* ${selectedInt}`,
+    `📅 *Date :* ${selectedDate}`,
+    `⏰ *Heure :* ${selectedTime}`,
+    notes ? `📝 *Notes :* ${notes}` : '',
+    '━━━━━━━━━━━━━━━━━',
+    '_Envoyé via le formulaire de RDV_'
+  ].filter(Boolean).join('\n');
+
+  const waNumber = '32499312986';
+  const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+
+  // Open WhatsApp IMMEDIATELY (synchronous click context — no popup blocker)
+  const waLink = document.createElement('a');
+  waLink.href = waUrl;
+  waLink.target = '_blank';
+  waLink.rel = 'noopener';
+  document.body.appendChild(waLink);
+  waLink.click();
+  document.body.removeChild(waLink);
+
+  // Show loading animation
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  await new Promise(r => setTimeout(r, 1000));
+  btn.classList.remove('loading');
+
+  // Show success screen
+  document.getElementById('rdvForm').style.display = 'none';
+  const screen = document.getElementById('successScreen');
+  screen.classList.add('show');
+
+  const info = document.getElementById('successInfo');
+  info.innerHTML = `
+    <div class="info-row"><span>👤</span> <span><span class="info-lbl">Patient</span><br>${prenom} ${nom}</span></div>
+    <div class="info-row"><span>📍</span> <span><span class="info-lbl">Ville</span><br>${selectedCity}</span></div>
+    <div class="info-row"><span>🦷</span> <span><span class="info-lbl">Intervention</span><br>${selectedInt}</span></div>
+    <div class="info-row"><span>📅</span> <span><span class="info-lbl">Date & heure</span><br>${selectedDate} à ${selectedTime}</span></div>
+  `;
+
+  screen.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+// ── Reset
+function resetForm() {
+  document.getElementById('rdvForm').reset();
+  document.getElementById('rdvForm').style.display = 'block';
+  document.getElementById('successScreen').classList.remove('show');
+  selectedCity = selectedInt = selectedDate = selectedTime = '';
+  document.querySelectorAll('.city-btn, .int-btn, .date-slot, .time-slot').forEach(b => b.classList.remove('selected'));
+  document.getElementById('timeLabel').style.display = 'none';
+  document.getElementById('timeGrid').style.display = 'none';
+  updateSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

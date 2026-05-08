@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr Mariem Ben Ammar – Carousel Instagram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* IG Frame */
+  .ig-frame {
+    width: 420px;
+    background: #1a1a1a;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+
+  /* Header */
+  .ig-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #1a1a1a;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .ig-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #C8A876, #8D6E3A);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px; color: #fff; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .ig-info { flex: 1; }
+  .ig-handle { font-size: 13px; font-weight: 600; color: #fff; }
+  .ig-sub { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .ig-more { color: rgba(255,255,255,0.5); font-size: 18px; }
+
+  /* Carousel Viewport */
+  .carousel-viewport {
+    width: 420px;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    cursor: grab;
+    position: relative;
+  }
+  .carousel-viewport:active { cursor: grabbing; }
+
+  .carousel-track {
+    display: flex;
+    width: calc(420px * 4);
+    height: 100%;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Each Slide */
+  .slide {
+    width: 420px;
+    height: 525px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Color Variables */
+  :root {
+    --gold: #C8A876;
+    --gold-light: #E8D5AF;
+    --gold-dark: #8D6E3A;
+    --cream: #F8F4EE;
+    --cream-border: #EAE3D6;
+    --dark: #0F0F0C;
+    --dark2: #1A1915;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  /* Swipe Arrow */
+  .swipe-arrow {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 48px; z-index: 9;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px 28px 20px;
+    z-index: 10;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .progress-track {
+    flex: 1; height: 3px; border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; border-radius: 2px; }
+
+  /* ============ SLIDE 1 – HERO ============ */
+  .slide-1 {
+    background: var(--cream);
+  }
+  .slide-1-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 80% 20%, rgba(200,168,118,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 70% at 10% 90%, rgba(200,168,118,0.06) 0%, transparent 60%);
+  }
+  .slide-1-tooth {
+    position: absolute;
+    right: -30px; top: 30px;
+    width: 280px; height: 280px;
+    opacity: 0.04;
+  }
+  .slide-1-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    height: 100%;
+    padding: 36px 36px 52px;
+    justify-content: space-between;
+  }
+  .slide-1-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 18px; color: #fff; font-weight: 600;
+  }
+  .logo-name {
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.8px; color: var(--dark);
+    line-height: 1.4;
+  }
+  .logo-sub { font-weight: 300; color: #888; font-size: 11px; }
+  .slide-1-main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .slide-1-tag {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .slide-1-tag::before {
+    content: ''; display: inline-block;
+    width: 28px; height: 1.5px; background: var(--gold);
+  }
+  .slide-1-h1 {
+    font-family: var(--serif); font-size: 44px; font-weight: 300;
+    line-height: 1.05; color: var(--dark);
+    letter-spacing: -0.5px; margin-bottom: 18px;
+  }
+  .slide-1-h1 em { font-style: italic; color: var(--gold-dark); }
+  .slide-1-desc {
+    font-family: var(--sans); font-size: 13px; font-weight: 400;
+    color: #666; line-height: 1.6; max-width: 280px;
+  }
+  .slide-1-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px;
+    border: 1px solid var(--cream-border);
+    border-radius: 24px;
+    font-family: var(--sans); font-size: 12px; color: #888;
+    margin-top: 24px; align-self: flex-start;
+  }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+  /* ============ SLIDE 2 – TUNIS ============ */
+  .slide-2 {
+    background: var(--dark);
+  }
+  .slide-2-glow {
+    position: absolute;
+    top: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,168,118,0.15) 0%, transparent 70%);
+  }
+  .slide-2-glow2 {
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,168,118,0.08) 0%, transparent 70%);
+  }
+  .slide-2-content {
+    position: relative; z-index: 2;
+    padding: 36px 36px 52px;
+    display: flex; flex-direction: column;
+    height: 100%;
+  }
+  .slide-2-icon {
+    width: 52px; height: 52px;
+    border: 1px solid rgba(200,168,118,0.3);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px;
+    background: rgba(200,168,118,0.05);
+  }
+  .location-tag {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 16px;
+  }
+  .slide-2-city {
+    font-family: var(--serif); font-size: 54px; font-weight: 300;
+    color: #fff; line-height: 0.95; margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+  .slide-2-city span { font-style: italic; color: var(--gold); }
+  .slide-2-date-box {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(200,168,118,0.2);
+    border-radius: 16px;
+  }
+  .date-label {
+    font-family: var(--sans); font-size: 10px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin-bottom: 8px;
+  }
+  .date-value {
+    font-family: var(--serif); font-size: 28px; font-weight: 300;
+    color: #fff; line-height: 1;
+  }
+  .date-value strong { font-weight: 600; color: var(--gold); }
+  .date-sub {
+    font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.4);
+    margin-top: 8px;
+  }
+  .slide-2-divider {
+    flex: 1;
+    border-left: 1px solid rgba(200,168,118,0.2);
+    margin: 20px 0 0 0;
+    margin-left: 4px;
+    height: 40px;
+    max-height: 40px;
+  }
+
+  /* ============ SLIDE 3 – SOUSSE ============ */
+  .slide-3 {
+    background: linear-gradient(160deg, #8D6E3A 0%, #C8A876 50%, #E8D5AF 100%);
+  }
+  .slide-3-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+  .slide-3-content {
+    position: relative; z-index: 2;
+    padding: 36px 36px 52px;
+    display: flex; flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+  }
+  .slide-3-top { }
+  .slide-3-tag {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); margin-bottom: 24px;
+  }
+  .slide-3-city {
+    font-family: var(--serif); font-size: 58px; font-weight: 300;
+    color: #fff; line-height: 0.9; margin-bottom: 6px;
+    letter-spacing: -1px;
+  }
+  .slide-3-city em { font-style: italic; }
+  .slide-3-bottom { }
+  .slide-3-date-big {
+    font-family: var(--serif); font-size: 80px; font-weight: 300;
+    color: rgba(255,255,255,0.15); line-height: 1;
+    margin-bottom: -10px;
+  }
+  .slide-3-date-label {
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.7); letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .slide-3-date-text {
+    font-family: var(--serif); font-size: 24px; color: #fff;
+    font-weight: 300;
+  }
+  .slide-3-date-text strong { font-weight: 600; }
+  .slide-3-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    margin-top: 16px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .slide-3-badge span {
+    font-family: var(--sans); font-size: 12px; color: #fff; font-weight: 500;
+  }
+
+  /* ============ SLIDE 4 – CTA ============ */
+  .slide-4 {
+    background: var(--cream);
+  }
+  .slide-4-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200,168,118,0.1) 0%, transparent 60%);
+  }
+  .slide-4-content {
+    position: relative; z-index: 2;
+    padding: 36px 36px 52px;
+    display: flex; flex-direction: column;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .slide-4-logo {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 26px; color: #fff; font-weight: 600;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(200,168,118,0.3);
+  }
+  .slide-4-tagline {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .slide-4-h {
+    font-family: var(--serif); font-size: 36px; font-weight: 300;
+    line-height: 1.15; color: var(--dark); margin-bottom: 12px;
+  }
+  .slide-4-h em { font-style: italic; color: var(--gold-dark); }
+  .slide-4-sub {
+    font-family: var(--sans); font-size: 13px; color: #888;
+    line-height: 1.6; margin-bottom: 32px;
+    max-width: 300px;
+  }
+  .slide-4-contacts {
+    display: flex; flex-direction: column; gap: 10px;
+    width: 100%; margin-bottom: 28px;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    background: #fff;
+    border: 1px solid var(--cream-border);
+    border-radius: 12px;
+  }
+  .contact-icon { font-size: 16px; }
+  .contact-text { font-family: var(--sans); font-size: 13px; color: var(--dark); font-weight: 500; }
+  .slide-4-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    background: var(--dark);
+    color: var(--gold-light);
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    border-radius: 32px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Dots */
+  .ig-dots {
+    display: flex; justify-content: center; align-items: center;
+    gap: 5px; padding: 10px;
+    background: #1a1a1a;
+  }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dot.active {
+    background: var(--gold); width: 20px; border-radius: 3px;
+  }
+
+  /* Actions */
+  .ig-actions {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px 6px;
+    background: #1a1a1a;
+  }
+  .ig-action-btn { color: rgba(255,255,255,0.7); cursor: pointer; }
+  .ig-bookmark { margin-left: auto; }
+
+  /* Caption */
+  .ig-caption {
+    padding: 4px 16px 16px;
+    background: #1a1a1a;
+  }
+  .caption-text { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+  .caption-text strong { color: #fff; font-weight: 600; }
+  .caption-time { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="ig-frame">
+
+  <!-- Header -->
+  <div class="ig-header">
+    <div class="ig-avatar">M</div>
+    <div class="ig-info">
+      <div class="ig-handle">dr.mariembenamar</div>
+      <div class="ig-sub">Chirurgien-Dentiste · Tunis & Sousse</div>
+    </div>
+    <div class="ig-more">···</div>
+  </div>
+
+  <!-- Carousel -->
+  <div class="carousel-viewport" id="viewport">
+    <div class="carousel-track" id="track">
+
+      <!-- SLIDE 1 – HERO -->
+      <div class="slide slide-1">
+        <div class="slide-1-bg"></div>
+        <!-- Tooth SVG watermark -->
+        <svg class="slide-1-tooth" viewBox="0 0 200 200" fill="none">
+          <path d="M100 10 C60 10, 20 40, 20 80 C20 100, 30 120, 40 145 C50 170, 60 190, 80 190 C90 190, 95 180, 100 160 C105 180, 110 190, 120 190 C140 190, 150 170, 160 145 C170 120, 180 100, 180 80 C180 40, 140 10, 100 10Z" fill="#C8A876"/>
+        </svg>
+        <div class="slide-1-content">
+          <div class="slide-1-logo">
+            <div class="logo-circle">M</div>
+            <div class="logo-name">
+              Dr Mariem Ben Ammar<br>
+              <span class="logo-sub">Chirurgien-Dentiste</span>
+            </div>
+          </div>
+          <div class="slide-1-main">
+            <div class="slide-1-tag">Consultations 2025</div>
+            <div class="slide-1-h1">Votre sourire<br>mérite le<br><em>meilleur</em></div>
+            <div class="slide-1-desc">Des soins dentaires d'excellence dans un cadre professionnel chaleureux.</div>
+            <div class="slide-1-pill">
+              <span class="pill-dot"></span>
+              Disponible à partir du 26 juin
+            </div>
+          </div>
+          <!-- Swipe Arrow -->
+          <div class="swipe-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 6l6 6-6 6" stroke="rgba(0,0,0,0.25)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <!-- Progress Bar -->
+          <div class="progress-bar">
+            <div class="progress-track" style="background:rgba(0,0,0,0.08);">
+              <div class="progress-fill" style="width:25%;background:#C8A876;"></div>
+            </div>
+            <span style="font-size:11px;color:rgba(0,0,0,0.3);font-weight:500;">1/4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 – TUNIS -->
+      <div class="slide slide-2">
+        <div class="slide-2-glow"></div>
+        <div class="slide-2-glow2"></div>
+        <div class="slide-2-content">
+          <div>
+            <div class="slide-2-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#C8A876" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="9" r="2.5" stroke="#C8A876" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="location-tag">Ville · 01</div>
+            <div class="slide-2-city">
+              <span>Tu</span>nis
+            </div>
+          </div>
+
+          <div class="slide-2-date-box">
+            <div class="date-label">Disponibilité</div>
+            <div class="date-value">À partir du <strong>26 juin</strong></div>
+            <div class="date-sub">Consultations & soins dentaires</div>
+          </div>
+
+          <div style="flex:1;display:flex;align-items:flex-end;">
+            <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">
+              Rendez-vous par message privé<br>ou par téléphone
+            </div>
+          </div>
+
+          <!-- Swipe Arrow -->
+          <div class="swipe-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <!-- Progress Bar -->
+          <div class="progress-bar">
+            <div class="progress-track" style="background:rgba(255,255,255,0.12);">
+              <div class="progress-fill" style="width:50%;background:#fff;"></div>
+            </div>
+            <span style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:500;">2/4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 – SOUSSE -->
+      <div class="slide slide-3">
+        <div class="slide-3-noise"></div>
+        <div class="slide-3-content">
+          <div class="slide-3-top">
+            <div class="slide-3-tag">Ville · 02</div>
+            <div class="slide-3-city">Sou<em>sse</em></div>
+          </div>
+          <div class="slide-3-bottom">
+            <div class="slide-3-date-big">26</div>
+            <div class="slide-3-date-label">DISPONIBLE À PARTIR DU</div>
+            <div class="slide-3-date-text"><strong>26 juin</strong> 2025</div>
+            <div class="slide-3-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="rgba(255,255,255,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Sur rendez-vous uniquement</span>
+            </div>
+          </div>
+          <!-- Swipe Arrow -->
+          <div class="swipe-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <!-- Progress Bar -->
+          <div class="progress-bar">
+            <div class="progress-track" style="background:rgba(255,255,255,0.15);">
+              <div class="progress-fill" style="width:75%;background:#fff;"></div>
+            </div>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5);font-weight:500;">3/4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 – CTA -->
+      <div class="slide slide-4">
+        <div class="slide-4-bg"></div>
+        <div class="slide-4-content">
+          <div class="slide-4-logo">M</div>
+          <div class="slide-4-tagline">Dr Mariem Ben Ammar</div>
+          <div class="slide-4-h">Au plaisir de<br>vous <em>accueillir</em></div>
+          <div class="slide-4-sub">Soins dentaires professionnels à Tunis et Sousse. Prenez rendez-vous dès aujourd'hui.</div>
+          <div class="slide-4-contacts">
+            <div class="contact-item">
+              <span class="contact-icon">💬</span>
+              <span class="contact-text">Message privé Instagram</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">📞</span>
+              <span class="contact-text">Contact téléphonique</span>
+            </div>
+          </div>
+          <div class="slide-4-cta">
+            ✦ &nbsp; Prendre Rendez-vous
+          </div>
+          <!-- Progress Bar -->
+          <div class="progress-bar">
+            <div class="progress-track" style="background:rgba(0,0,0,0.08);">
+              <div class="progress-fill" style="width:100%;background:#C8A876;"></div>
+            </div>
+            <span style="font-size:11px;color:rgba(0,0,0,0.3);font-weight:500;">4/4</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /track -->
+  </div><!-- /viewport -->
+
+  <!-- Dots -->
+  <div class="ig-dots" id="dots">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+  </div>
+
+  <!-- Actions -->
+  <div class="ig-actions">
+    <div class="ig-action-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.8"/></svg>
+    </div>
+    <div class="ig-action-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+    </div>
+    <div class="ig-action-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="ig-action-btn ig-bookmark">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+    </div>
+  </div>
+
+  <!-- Caption -->
+  <div class="ig-caption">
+    <div class="caption-text"><strong>dr.mariembenamar</strong> Votre sourire mérite le meilleur ✨ Consultations dentaires à Tunis et Sousse · à partir du 26 juin 🦷 <span style="color:#C8A876;">#dentiste #Tunis #Sousse #soireedentaire</span></div>
+    <div class="caption-time">IL Y A 2 HEURES</div>
+  </div>
+
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const dots = document.querySelectorAll('.dot');
+  const SLIDE_W = 420;
+  const TOTAL = 4;
+  let current = 0;
+  let startX = 0, startTranslate = 0, isDragging = false;
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(TOTAL - 1, idx));
+    track.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    track.style.transform = `translateX(${-current * SLIDE_W}px)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  const vp = document.getElementById('viewport');
+
+  vp.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.clientX;
+    startTranslate = -current * SLIDE_W;
+    track.style.transition = 'none';
+  });
+  vp.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    track.style.transform = `translateX(${startTranslate + dx}px)`;
+  });
+  vp.addEventListener('mouseup', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.clientX - startX;
+    if (dx < -50) goTo(current + 1);
+    else if (dx > 50) goTo(current - 1);
+    else goTo(current);
+  });
+  vp.addEventListener('mouseleave', () => {
+    if (isDragging) { isDragging = false; goTo(current); }
+  });
+
+  // Touch
+  vp.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startTranslate = -current * SLIDE_W;
+    track.style.transition = 'none';
+  }, { passive: true });
+  vp.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - startX;
+    track.style.transform = `translateX(${startTranslate + dx}px)`;
+  }, { passive: true });
+  vp.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (dx < -50) goTo(current + 1);
+    else if (dx > 50) goTo(current - 1);
+    else goTo(current);
+  });
+</script>
+
+</body>
+</html>
